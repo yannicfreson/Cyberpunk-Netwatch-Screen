@@ -76,8 +76,4 @@ function Symbol(x, y) {
 var x = 0;
 var intervalID = setInterval(function () {
   draw()
-  x++
-  if (x === 2000) {
-    window.clearInterval(intervalID);
-  }
 }, 25);
