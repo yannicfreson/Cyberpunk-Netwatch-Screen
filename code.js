@@ -1,8 +1,8 @@
 const config = {
-  "fontSize": "20",
-  "switchLowerBound": "10",
-  "switchUpperBound": "20",
-  "letters": "01"
+  "fps":"30",
+  "fontSize": "30",
+  "letters": "01",
+  "density": "5" // bigger number => lower density
 }
 
 let screenW = window.innerWidth
@@ -46,13 +46,13 @@ function draw() {
   ctx.fillStyle = '#ffffff'
   ctx.font = `${config.fontSize}px Arial`
 
-  for (let i = 0; i < nrOfColumns/10; i++) {
+  for (let i = 0; i < nrOfColumns/config.density; i++) {
     let x = Math.floor((Math.random() * nrOfColumns) + 0)
     let y = Math.floor((Math.random() * nrOfRows) + 0)
 
     thisOne = new Symbol(x, y)
     ctx.fillStyle = '#000000'
-    ctx.fillRect(thisOne.x/*  - config.fontSize */, thisOne.y - config.fontSize, config.fontSize, config.fontSize)
+    ctx.fillRect(thisOne.x, thisOne.y - config.fontSize, config.fontSize, config.fontSize)
     let highlighted = Math.floor(Math.random() * 15)
     if (highlighted == 1) {
       ctx.fillStyle = '#00aaff'
@@ -69,11 +69,8 @@ function Symbol(x, y) {
   this.y = (screenH / nrOfRows) * y
 
   this.value = config.letters[Math.floor(Math.random() * config.letters.length)]
-
-  this.switchInterval = Math.floor((Math.random() * config.switchUpperBound) + config.switchLowerBound)
 }
 
-var x = 0;
 var intervalID = setInterval(function () {
   draw()
-}, 25);
+}, 1000/config.fps);
