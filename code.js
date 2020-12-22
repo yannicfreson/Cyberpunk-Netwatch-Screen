@@ -1,11 +1,17 @@
-const config = {
+//  __   _ _______ _______ _  _  _ _______ _______ _______ _     _  //
+//  | \  | |______    |    |  |  | |_____|    |    |       |_____|  //
+//  |  \_| |______    |    |__|__| |     |    |    |_____  |     |  //
+//                                                                  //
+
+let config = {
   "fps":"30", // recommended 30 fps
   "fontSize": "20",
-  "letters": "01",
-  "spacing": 20,
-  "randomness":25,  // bigger number => less likely to spawn a blue letter
+  "letters": "01",  // the different letters to be rendered
+  "spacing": 20,  // how many columns between two black ones
+  "randomness":5,  // bigger number => less likely to spawn a blue letter
   "opacity": "0.05",  // lower number => disappear faster. recommended value between 0.1 and 0.001
-  "highlightedColor":"#00aaff",
+  "highlightedColor": "#00aaff",
+  "highlightedColor2": "#00ccff",
   "density": "0.5"  // bigger number => lower density
 }
 
@@ -15,7 +21,7 @@ let screenH = window.innerHeight
 let nrOfColumns = screenW / config.fontSize
 let nrOfRows = screenH / config.fontSize
 
-let fpsCounter = 0
+let blurLevel = 0
 
 let c;
 let ctx;
@@ -43,6 +49,7 @@ function setCanvasSize() {
   nrOfRows = screenH / config.fontSize
   ctx.fillStyle = 'rgba(0,0,0,1)'
   ctx.fillRect(0, 0, screenW, screenH)
+  c.style.webkitFilter = `blur(${blurLevel}px)`;
 }
 
 function draw() {
@@ -60,10 +67,12 @@ function draw() {
     ctx.fillStyle = '#000000'
     ctx.fillRect(thisOne.x, thisOne.y - config.fontSize, config.fontSize, config.fontSize)
     let highlighted = Math.floor(Math.random() * config.randomness)
-    if (highlighted == 1) {
+    if (highlighted === 0) {
       ctx.fillStyle = config.highlightedColor
+    } else if (highlighted === 1) {
+      ctx.fillStyle = config.highlightedColor2
     } else {
-      ctx.fillStyle = '#ffffff'
+      ctx.fillStyle = "#ffffff"
     }
     
     ctx.fillText(thisOne.value, thisOne.x, thisOne.y)
@@ -86,5 +95,8 @@ function Symbol(x, y) {
 
 var intervalID = setInterval(function () {
   draw()
-  fpsCounter++
-}, 1000/config.fps);
+}, 1000 / config.fps);
+
+console.log("Config:");
+console.log(config);
+console.log("Edit to your heart's content ;p");
