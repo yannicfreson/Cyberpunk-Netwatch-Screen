@@ -1,8 +1,12 @@
 const config = {
-  "fps":"30",
-  "fontSize": "30",
+  "fps":"30", // recommended 30 fps
+  "fontSize": "20",
   "letters": "01",
-  "density": "5" // bigger number => lower density
+  "spacing": 20,
+  "randomness":25,  // bigger number => less likely to spawn a blue letter
+  "opacity": "0.05",  // lower number => disappear faster. recommended value between 0.1 and 0.001
+  "highlightedColor":"#00aaff",
+  "density": "0.5"  // bigger number => lower density
 }
 
 let screenW = window.innerWidth
@@ -10,6 +14,8 @@ let screenH = window.innerHeight
 
 let nrOfColumns = screenW / config.fontSize
 let nrOfRows = screenH / config.fontSize
+
+let fpsCounter = 0
 
 let c;
 let ctx;
@@ -40,7 +46,7 @@ function setCanvasSize() {
 }
 
 function draw() {
-  ctx.fillStyle = 'rgba(0,0,0,0.01)'
+  ctx.fillStyle = `rgba(0,0,0,${config.opacity})`
   ctx.fillRect(0, 0, screenW, screenH)
 
   ctx.fillStyle = '#ffffff'
@@ -53,14 +59,21 @@ function draw() {
     thisOne = new Symbol(x, y)
     ctx.fillStyle = '#000000'
     ctx.fillRect(thisOne.x, thisOne.y - config.fontSize, config.fontSize, config.fontSize)
-    let highlighted = Math.floor(Math.random() * 15)
+    let highlighted = Math.floor(Math.random() * config.randomness)
     if (highlighted == 1) {
-      ctx.fillStyle = '#00aaff'
+      ctx.fillStyle = config.highlightedColor
     } else {
       ctx.fillStyle = '#ffffff'
     }
     
     ctx.fillText(thisOne.value, thisOne.x, thisOne.y)
+  }
+
+  let spaceX = ((config.fontSize * config.spacing) - config.fontSize) - (config.fontSize/4)
+  for (let i = 0; spaceX < screenW; i++) {
+    ctx.fillStyle = '#000000'
+    ctx.fillRect(spaceX, 0, config.fontSize, screenH)
+    spaceX += config.fontSize * config.spacing
   }
 }
 
@@ -73,4 +86,5 @@ function Symbol(x, y) {
 
 var intervalID = setInterval(function () {
   draw()
+  fpsCounter++
 }, 1000/config.fps);
